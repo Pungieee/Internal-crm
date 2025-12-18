@@ -50,7 +50,7 @@ Invoke-RestMethod -Uri "http://localhost:4000/api/auth/seed-demo-users" -Method 
 
 
 4. **Open your browser:**:
-5. 
+
 Frontend: http://localhost:3000
 
 Backend API: http://localhost:4000
