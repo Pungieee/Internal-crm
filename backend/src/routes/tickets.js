@@ -5,10 +5,8 @@ import { calculateSlaDeadline, applySlaStatus } from '../utils/sla.js';
 
 const router = express.Router();
 
-// All ticket routes require authentication
 router.use(authenticate);
 
-// Create ticket (RESIDENT + ADMIN)
 router.post('/', authorize('RESIDENT', 'ADMIN'), async (req, res) => {
   const { title, description, priority = 'MEDIUM' } = req.body;
 
@@ -55,7 +53,6 @@ router.get('/', async (req, res) => {
       orderBy: { createdAt: 'desc' },
     });
 
-    // Apply SLA logic to each ticket (may update status to OVERDUE)
     const updatedTickets = await Promise.all(
       tickets.map((t) => applySlaStatus(prisma, t))
     );
@@ -77,7 +74,6 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Ticket not found' });
     }
 
-    // Enforce visibility rules
     if (req.user.role === 'STAFF' && ticket.assignedStaffId !== req.user.id) {
       return res.status(403).json({ message: 'Not your ticket' });
     }
@@ -138,10 +134,8 @@ router.put('/:id', async (req, res) => {
       data,
     });
 
-    // Apply SLA overdue logic after update
     const finalTicket = await applySlaStatus(prisma, updated);
 
-    // If staff was (re)assigned, emit a Socket.io event
     if (req.app.get('io') && typeof assignedStaffId !== 'undefined') {
       req.app.get('io').emit('ticketAssigned', finalTicket);
     }
@@ -153,7 +147,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Delete ticket (ADMIN only for simplicity)
+// Delete ticket
 router.delete('/:id', authorize('ADMIN'), async (req, res) => {
   const id = Number(req.params.id);
 

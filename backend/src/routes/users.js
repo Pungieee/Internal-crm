@@ -4,11 +4,8 @@ import { authenticate, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// All user routes require authentication
 router.use(authenticate);
 
-// Admin can list users, optionally filtered by role.
-// Example: GET /api/users?role=STAFF
 router.get('/', authorize('ADMIN'), async (req, res) => {
   const { role } = req.query;
 

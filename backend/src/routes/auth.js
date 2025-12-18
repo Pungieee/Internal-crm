@@ -5,8 +5,6 @@ import { generateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Simple login route using email + password.
-// NOTE: For demo/resume purposes. In production you should enforce stronger rules & HTTPS.
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -41,8 +39,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Simple seed endpoint to create demo users quickly (ADMIN only in real life).
-// For resume demo you can call this once manually via Postman.
 router.post('/seed-demo-users', async (req, res) => {
   try {
     const passwordHash = await bcrypt.hash('password123', 10);

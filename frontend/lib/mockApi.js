@@ -26,7 +26,6 @@ let MOCK_TICKETS = [
 let NEXT_ID = 3;
 
 export async function mockLogin({ email, role }) {
-  // Very naive mock: just return a fake token and user object
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
